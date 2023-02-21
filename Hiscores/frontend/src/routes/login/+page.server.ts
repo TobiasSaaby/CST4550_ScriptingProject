@@ -1,4 +1,5 @@
 import { redirect } from "@sveltejs/kit";
+import { BACKEND_URL } from "static/static_values";
 import { userStore } from "../../stores/store.user";
 	
 export const actions = {
@@ -7,7 +8,7 @@ export const actions = {
 		const username = formData.get('username')
 		const password = formData.get('password')
 
-		let resp = await fetch("http://backend:8080/users/login", {method: 'POST', body: JSON.stringify({username, password})});
+		let resp = await fetch(`http://${BACKEND_URL}/users/login`, {method: 'POST', body: JSON.stringify({username, password})});
 		let respJson = await resp.json();
 		
 		userStore.set(respJson.data.username);

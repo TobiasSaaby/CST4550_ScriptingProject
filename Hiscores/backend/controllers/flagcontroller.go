@@ -32,7 +32,7 @@ func SubmitFlag(c *gin.Context) {
 
 	if err := handlers.DB.Where("flag = ?", submitFlag.Flag).Find(&flag).Error; err != nil {
 		fmt.Println("Flag not found")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Flag not found!"})
 		return
 	}
 

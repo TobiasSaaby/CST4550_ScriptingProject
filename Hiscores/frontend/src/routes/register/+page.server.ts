@@ -1,4 +1,5 @@
-import { get } from "svelte/store";
+import { redirect } from "@sveltejs/kit";
+import { BACKEND_URL } from "static/static_values";
 import { userStore } from "../../stores/store.user";
 	
 export const actions = {
@@ -8,11 +9,11 @@ export const actions = {
 		const password = formData.get('password')
 		const repeat_password = formData.get('repPassword')
 
-		let resp = await fetch("http://backend:8080/users/register", {method: 'POST', body: JSON.stringify({username, password, repeat_password})});
+		let resp = await fetch(`http://${BACKEND_URL}/users/register`, {method: 'POST', body: JSON.stringify({username, password, repeat_password})});
 		let respJson = await resp.json();
-		console.log(respJson);
-		console.log(get(userStore));
-		userStore.set(username);
-		console.log(get(userStore));
+		
+		userStore.set(respJson.data.username);
+
+		throw redirect(307, '/');
 	}
 }

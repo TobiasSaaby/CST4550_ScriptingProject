@@ -1,10 +1,11 @@
 import { userStore } from "../stores/store.user";
 import { get } from "svelte/store";
 import { redirect } from "@sveltejs/kit";
+import { BACKEND_URL } from "../../static/static_values"
 
 export const load = async () => {
-    const reqUsers = await fetch("http://backend:8080/users", {method: "GET"});
-    const reqFlags = await fetch("http://backend:8080/flags", {method: "GET"});
+    const reqUsers = await fetch(`http://${BACKEND_URL}/users`, {method: "GET"});
+    const reqFlags = await fetch(`http://${BACKEND_URL}/flags`, {method: "GET"});
 
     const userTableData = (await reqUsers.json()).data;
     const flagTableData = (await reqFlags.json()).data;
@@ -18,7 +19,7 @@ export const actions = {
         const flag = formData.get('flag');
         const username = get(userStore);
 
-		let resp = await fetch("http://backend:8080/flags/submit",
+		let resp = await fetch(`http://${BACKEND_URL}/flags/submit`,
             {
                 method: 'POST', 
                 body: JSON.stringify({username, flag})

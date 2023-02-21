@@ -4,7 +4,7 @@ import { userStore } from "../../stores/store.user";
 	
 export const load = async () => {
 	userStore.set(null);
-	console.log(get(userStore));
+	
 	throw redirect(307, '/');
 }
 	
