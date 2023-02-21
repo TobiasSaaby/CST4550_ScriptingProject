@@ -1,16 +1,26 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
+	import { enhance } from "$app/forms";
 	import type { User } from "src/models/model.user";
 	import type { Flag } from "src/models/model.flag";
 
-	export let data: {user: string, userTableData: User[], flagTableData: Flag[]};
-	let {user, userTableData, flagTableData} = data;
+	export let data: {
+		user: string;
+		userTableData: User[];
+		flagTableData: Flag[];
+	};
+	let { user, userTableData, flagTableData } = data;
 
-	userTableData = userTableData.sort((x, y) =>
-		y.flags.reduce((ySum, yVal) => ySum = yVal.score, 0) -
-		x.flags.reduce((xSum, xVal) => xSum = xVal.score, 0));
+	userTableData = userTableData.sort(
+		(x, y) =>
+			y.flags.reduce((ySum, yVal) => (ySum = yVal.score), 0) -
+			x.flags.reduce((xSum, xVal) => (xSum = xVal.score), 0)
+	);
 </script>
-<h1>Hiscore:</h1>
+
+<div class="wrapper">
+	<h1>Hiscore</h1>
+	<br />
+</div>
 <div class="wrapper">
 	<table>
 		<thead>
@@ -20,14 +30,20 @@
 				<th>Flags</th>
 			</tr>
 		</thead>
-		<tbody> <!-- Remember to highlight current user -->
+		<tbody>
 			{#each Object.keys(userTableData) as userData}
-				<tr class="{userTableData[Number(userData)].username == user ? 'player' : ''}">
+				<tr
+					class={userTableData[Number(userData)].username == user
+						? "player"
+						: ""}
+				>
 					<td>{userTableData[Number(userData)].username}</td>
-					<td>{userTableData[Number(userData)].flags.reduce(
+					<td
+						>{userTableData[Number(userData)].flags.reduce(
 							(pSum, x) => pSum + x.score,
 							0
-						)}</td>
+						)}</td
+					>
 					<td>{userTableData[Number(userData)].flags.length}</td>
 				</tr>
 			{/each}
@@ -36,21 +52,22 @@
 </div>
 
 {#if user}
-<h1>Submit flag:</h1>
-<form use:enhance method="POST" action="?/submitFlag" class="">
-<fieldset>
-	<fieldset>
-		<label for="flag" >Flag</label>
-		<input type="text" id="flag" name="flag" />
-	</fieldset>
-
-	<button type="submit">Submit</button>
-</fieldset>
-</form>
+	<div class="wrapper">
+		<h1>Submit flag</h1>
+		<br />
+	</div>
+	<div class="wrapper">
+		<form use:enhance method="POST" action="?/submitFlag" class="">
+			<input type="text" id="flag" name="flag" />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
 {/if}
 
-<h1>Flag details:</h1>
-<br />
+<div class="wrapper">
+	<h1>Flag details</h1>
+	<br />
+</div>
 <div class="wrapper">
 	<table>
 		<thead>
@@ -59,7 +76,7 @@
 				<th>Access (Port)</th>
 				<th>Score</th>
 				{#if user}
-				<th>Status</th>
+					<th>Status</th>
 				{/if}
 			</tr><tr />
 		</thead>
@@ -70,7 +87,7 @@
 					<td>{flag.access}</td>
 					<td>{flag.score}</td>
 					{#if user}
-					<td>Status goes here</td>
+						<td>Status goes here</td>
 					{/if}
 				</tr>
 			{/each}
@@ -88,6 +105,46 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+		margin-top: 1.5em;
+		color: #111;
+		margin-bottom: 1.5em;
+	}
+
+	input[type="text"] {
+		border-radius: 10px 0px 0px 10px;
+		width: 200px;
+		height: 50px;
+		padding-right: 50px;
+		background: rgba(0, 0, 0, 0.1);
+		border: 0;
+	}
+
+	input[type="submit"] {
+		margin-left: -5px;
+		border-radius: 0px 10px 10px 0px;
+		height: 50px;
+		width: 50px;
+		background: rgba(255, 137, 0, 0.9);
+		color: rgba(0, 0, 0, 0.8);
+		border: 0;
+	}
+
+	table,
+	th,
+	td {
+		border-collapse: collapse;
+		margin-bottom: 10px;
+	}
+
+	th,
+	td {
+		border-style: solid;
+		border-width: 0 1px 1px 0;
+		border-color: rgba(0, 0, 0, 0.1);
 	}
 
 	table {
@@ -110,25 +167,21 @@
 		padding: 10px 20px;
 		color: rgba(129, 69, 0, 1);
 	}
-	th,
-	td {
-		border-style: solid;
-		border-width: 0 1px 1px 0;
-		border-color: rgba(0, 0, 0, 0.1);
-	}
 
-	th:first-child {
-		border-top-left-radius: 5px;
-	}
-	th:last-child {
-		border-top-right-radius: 5px;
-		border-right: none;
-	}
 	th:first-child,
 	td:first-child {
 		padding: 7px 8px;
 	}
 
+	th:first-child {
+		border-top-left-radius: 5px;
+	}
+
+	th:last-child {
+		border-top-right-radius: 5px;
+		border-right: none;
+	}
+	
 	td {
 		padding: 7px 20px;
 		background: rgba(230, 230, 230, 1);
@@ -143,34 +196,5 @@
 	}
 	tr td:last-child {
 		border-right: none;
-	}
-	table,
-	th,
-	td {
-		border-collapse: collapse;
-		margin-bottom: 10px;
-	}
-
-	table.redTable thead th {
-		font-size: 19px;
-		font-weight: bold;
-		color: #ffffff;
-		text-align: center;
-		border-left: 2px solid #a40808;
-	}
-
-	table.redTable thead th:first-child {
-		border-left: none;
-	}
-
-	table.blueTable thead th {
-		font-size: 15px;
-		font-weight: bold;
-		color: #ffffff;
-		border-left: 2px solid #d0e4f5;
-	}
-
-	table.blueTable thead th:first-child {
-		border-left: none;
 	}
 </style>
