@@ -11,6 +11,7 @@ WORKDIR /home/bob
 COPY ./findpass.c .
 
 RUN gcc -o findpass findpass.c
+RUN rm findpass.c
 
 RUN service ssh start
 EXPOSE 22

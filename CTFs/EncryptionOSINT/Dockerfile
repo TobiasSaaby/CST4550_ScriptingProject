@@ -1,6 +1,7 @@
 FROM debian:latest
 
-RUN apt-get update && apt-get install -y python3 openssh-server
+RUN apt-get update && apt-get install -y python3 python3-pip openssh-server
+RUN pip install pycrypto
 
 RUN useradd -ms /bin/bash bob
 RUN echo 'bob:bob' | chpasswd

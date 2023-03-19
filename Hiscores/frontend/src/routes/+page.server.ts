@@ -14,10 +14,10 @@ export const load = async () => {
 }
 
 export const actions = {
-    submitFlag: async ({request}: {request: any}) => {
+    submitFlag: async ({request, locals}: {request: any, locals: any}) => {
         const formData = await request.formData();
         const flag = formData.get('flag');
-        const username = get(userStore);
+        const username = locals.user;
 
 		let resp = await fetch(`http://${BACKEND_URL}/flags/submit`,
             {

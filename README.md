@@ -60,3 +60,9 @@ The output will be a b64-encoded image. The image contains coordinates to a plac
 
 - [ ] Disable ASLR in BufferOverflow CTF
 - [ ] Add more CTFs
+- [ ] Add status check for flags
+- [x] Fix bug when submitting non-valid flags
+- [ ] Add error messages to frontend
+- [ ] Parse errors properly by backend
+- [ ] Implement token-based authentication
+- [ ] Hash the password lol
