@@ -23,7 +23,7 @@ int main(int argc, char **argv){
   FILE *f = fopen("/root/flag.txt","r");
   
   fgets(flag,FLAGSIZE_MAX,f);
-  signal(SIGSEGV, sigsegv_handler); // Set up signal handler
+  signal(SIGSEGV, sigsegv_handler);
   
   gid_t gid = getegid();
   setresgid(gid, gid, gid);
