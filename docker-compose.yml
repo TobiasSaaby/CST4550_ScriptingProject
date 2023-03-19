@@ -12,6 +12,24 @@ services:
     networks:
       - shared
 
+  ctf2:
+    build:
+      context: ./CTFs/EncryptionOSINT
+      dockerfile: Dockerfile
+    ports:
+      - "${CTF2_ACCESS}:22"
+    networks:
+      - shared
+
+  ctf3:
+    build:
+      context: ./CTFs/Strings
+      dockerfile: Dockerfile
+    ports:
+      - "${CTF3_ACCESS}:22"
+    networks:
+      - shared
+
   backend:
     env_file:
       - ./.env

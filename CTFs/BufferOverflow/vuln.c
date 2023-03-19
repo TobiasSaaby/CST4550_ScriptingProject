@@ -21,18 +21,12 @@ void vuln(char *input){
 int main(int argc, char **argv){
   
   FILE *f = fopen("/root/flag.txt","r");
-  if (f == NULL) {
-    printf("%s %s", "Please create 'flag.txt' in this directory with your",
-                    "own debugging flag.\n");
-    exit(0);
-  }
   
   fgets(flag,FLAGSIZE_MAX,f);
   signal(SIGSEGV, sigsegv_handler); // Set up signal handler
   
   gid_t gid = getegid();
   setresgid(gid, gid, gid);
-
 
   printf("Input: ");
   fflush(stdout);
