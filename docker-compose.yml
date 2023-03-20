@@ -30,6 +30,15 @@ services:
     networks:
       - shared
 
+  ctf4:
+    build: 
+      context: ./CTFs/SQLi
+      dockerfile: Dockerfile
+    ports:
+      - "${CTF4_ACCESS}:8000"
+    networks:
+      - shared
+
   backend:
     env_file:
       - ./.env

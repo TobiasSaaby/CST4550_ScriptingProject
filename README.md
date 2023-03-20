@@ -56,6 +56,26 @@ The output will be a b64-encoded image. The image contains coordinates to a plac
 
 ## SQLi
 
+This code uses simple php and MySQL for creating a simple web application login form.
+It is a basic PHP code which we have used for creating a user registration form which uses the MySQLi extension to interact with the MySQL database.
+The project contains 5 php files.
+Config.php, register.php, login.php, logout.php and welcome.php
+The code starts by including the "config.php" file, which contains the database configuration details used to connect to the MYSQL database server.
+In registration, register.php file has been scripted in such a way that errors will be generated if any user tries to submit the form with out any value such as username and password, or if the user already exists in the database.
+The login page, login.php ; we have created a login form page for username and password.
+Whenever username and password has been submitted, these inputs will be checked against the credentials stored in database. If username and password matches, access will be granted if not login attempt will fail.
+The Welcome.php code is where the user is redirected after entering the correct credentials.
+ 
+We are using the following query in the backend 
+
+`$sql = "SELECT id, username FROM users WHERE username = '$username' and password = md5('$password')";`
+
+When we use sql inection ' or 1 = 1 -- '
+ The following query would be run in the back end 
+SELECT id, username, password FROM users WHERE username = '' or 1 = 1 -- '' and password = md5('123')
+The username field has null value but there is one condition which says 1=1 which is always true.
+After the or condition there is (--) symbols which will ignore the rest of the sql.
+
 # Future work
 
 - [ ] Disable ASLR in BufferOverflow CTF
