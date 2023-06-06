@@ -5,6 +5,7 @@ import (
 	"main/models"
 	"os"
 	"strconv"
+	"strings"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -33,6 +34,7 @@ func InitiateDatabase() {
 	fmt.Println("Initiating DB...")
 
 	i := 1
+
 	for {
 		CTFString := fmt.Sprintf("CTF%v_", i)
 		CTFScore, err := strconv.Atoi(os.Getenv(CTFString + "SCORE"))
@@ -49,8 +51,10 @@ func InitiateDatabase() {
 		CTFFlag := os.Getenv(CTFString + "FLAG")
 		CTFAccess := os.Getenv(CTFString + "ACCESS")
 		CTFDescription := os.Getenv(CTFString + "DESCRIPTION")
+		CTFHosted := strings.Contains(CTFDescription, "ami")
 
-		flag := models.Flag{Flag: CTFFlag, Description: CTFDescription, Score: CTFScore, Access: CTFAccess}
+		flag := models.Flag{Flag: CTFFlag, Description: CTFDescription, Score: CTFScore, Access: CTFAccess, Hosted: CTFHosted}
+
 		DB.Create(&flag)
 
 		i++

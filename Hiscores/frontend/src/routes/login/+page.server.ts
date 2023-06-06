@@ -1,6 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 import { BACKEND_URL } from "../../../static/static_values";
 import { userStore } from "../../stores/store.user";
+import type { User } from "src/models/model.user";
 	
 export const actions = {
 	login: async ({cookies, request}: {cookies:any, request:any}) => {
@@ -10,14 +11,14 @@ export const actions = {
 
 		let resp = await fetch(`http://${BACKEND_URL}/users/login`, {method: 'POST', body: JSON.stringify({username, password})});
 		let respJson = await resp.json();
-		let usernameReturn = respJson.data.username;
+		let userSignedIn: User = respJson.data;
 
-		cookies.set('session', usernameReturn, {
+		cookies.set('session', userSignedIn, {
 			path: '/',
 			secure: 0
 		})
 
-    	console.log(`login server username: ${usernameReturn}`)
+    	console.log(`login server user: ${userSignedIn}`)
     	console.log(`login server cookie: ${JSON.stringify(cookies.get('session'))}`)
 
 		

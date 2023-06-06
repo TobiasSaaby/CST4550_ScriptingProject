@@ -3,4 +3,5 @@ export interface Flag{
     description: string;
     score: number;
     access: string;
+    hosted: boolean;
 }

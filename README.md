@@ -76,7 +76,7 @@ SELECT id, username, password FROM users WHERE username = '' or 1 = 1 -- '' and 
 The username field has null value but there is one condition which says 1=1 which is always true.
 After the or condition there is (--) symbols which will ignore the rest of the sql.
 
-# Future work
+# Future work / Wall of shame
 
 - [ ] Disable ASLR in BufferOverflow CTF
 - [ ] Add more CTFs
@@ -86,3 +86,4 @@ After the or condition there is (--) symbols which will ignore the rest of the s
 - [ ] Parse errors properly by backend
 - [ ] Implement token-based authentication
 - [ ] Hash the password lol
+- [ ] Don´t return flags in the obj

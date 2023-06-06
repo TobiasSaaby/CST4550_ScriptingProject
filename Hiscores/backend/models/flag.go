@@ -5,6 +5,7 @@ type Flag struct {
 	Description string `json:"description"`
 	Access      string `json:"access"`
 	Score       int    `json:"score"`
+	Hosted      bool   `json:"hosted"`
 }
 
 type SubmitFlag struct {

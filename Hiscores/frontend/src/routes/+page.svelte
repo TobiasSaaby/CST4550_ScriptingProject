@@ -4,7 +4,7 @@
 	import type { Flag } from "src/models/model.flag";
 
 	export let data: {
-		user: string;
+		user: User;
 		userTableData: User[];
 		flagTableData: Flag[];
 	};
@@ -33,7 +33,7 @@
 		<tbody>
 			{#each Object.keys(userTableData) as userData}
 				<tr
-					class={userTableData[Number(userData)].username == user
+					class={userTableData[Number(userData)].username == user.username
 						? "player"
 						: ""}
 				>
@@ -73,7 +73,7 @@
 		<thead>
 			<tr>
 				<th>Description</th>
-				<th>Access (Port)</th>
+				<th>Access</th>
 				<th>Score</th>
 				{#if user}
 					<th>Status</th>
@@ -84,10 +84,15 @@
 			{#each flagTableData as flag}
 				<tr>
 					<td>{flag.description}</td>
-					<td>{flag.access}</td>
+					{#if flag.hosted}
+						<td><button>Init CTF</button></td>
+					{/if}
+					{#if !flag.hosted}
+						<td>{flag.access}</td>
+					{/if}
 					<td>{flag.score}</td>
 					{#if user}
-						<td>Status goes here</td>
+						<td>Status: {user.flags.some(x => x.flag == flag.flag) ? "Completed!" : "Not done!"}</td>
 					{/if}
 				</tr>
 			{/each}
