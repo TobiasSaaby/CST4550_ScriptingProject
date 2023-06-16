@@ -1,20 +1,44 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import { BACKEND_URL } from "../static/static_values"
 	import type { User } from "src/models/model.user";
 	import type { Flag } from "src/models/model.flag";
 
 	export let data: {
-		user: User;
+		user: string;
 		userTableData: User[];
 		flagTableData: Flag[];
+		userFlags: Flag[];
 	};
-	let { user, userTableData, flagTableData } = data;
+
+	let { user, userTableData, flagTableData, userFlags } = data;
 
 	userTableData = userTableData.sort(
 		(x, y) =>
 			y.flags.reduce((ySum, yVal) => (ySum = yVal.score), 0) -
 			x.flags.reduce((xSum, xVal) => (xSum = xVal.score), 0)
 	);
+
+	let initCtf = (e) => {
+		console.log(e)
+	}
+
+	let submitFlag = async (event: any) => {
+		let fd = new FormData(event.target)
+		
+		let resp = await fetch(`http://${BACKEND_URL}/flags/submit`,
+            {
+                method: 'POST', 
+                body: JSON.stringify({username: user, flag: fd.get('flag')})
+            });
+        
+		if(resp.status == 200){
+			location.reload();
+        } else {
+			console.log('lolol');
+		}
+    }
+
 </script>
 
 <div class="wrapper">
@@ -33,7 +57,7 @@
 		<tbody>
 			{#each Object.keys(userTableData) as userData}
 				<tr
-					class={userTableData[Number(userData)].username == user.username
+					class={user && userTableData[Number(userData)].username == user
 						? "player"
 						: ""}
 				>
@@ -57,12 +81,16 @@
 		<br />
 	</div>
 	<div class="wrapper">
-		<form use:enhance method="POST" action="?/submitFlag" class="">
+		<form on:submit|preventDefault={submitFlag} class="">
 			<input type="text" id="flag" name="flag" />
 			<input type="submit" value="Submit" />
 		</form>
 	</div>
 {/if}
+
+<form on:submit|preventDefault={initCtf} class="">
+	<input type="submit" value="Submit" />
+</form>
 
 <div class="wrapper">
 	<h1>Flag details</h1>
@@ -85,14 +113,13 @@
 				<tr>
 					<td>{flag.description}</td>
 					{#if flag.hosted}
-						<td><button>Init CTF</button></td>
-					{/if}
-					{#if !flag.hosted}
+						<td><button on:click={() => initCtf(flag.access)}> Init CTF </button></td>
+					{:else}
 						<td>{flag.access}</td>
 					{/if}
 					<td>{flag.score}</td>
 					{#if user}
-						<td>Status: {user.flags.some(x => x.flag == flag.flag) ? "Completed!" : "Not done!"}</td>
+						<td>Status: {userFlags && userFlags.some(x => x.flag == flag.flag) ? "Completed!" : "Not done!"}</td>
 					{/if}
 				</tr>
 			{/each}

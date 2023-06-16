@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -14,6 +15,12 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
+	envErr := godotenv.Load("../../.env")
+
+	if envErr != nil {
+		panic("Error loading .env file")
+	}
+
 	fmt.Println("Connecting to DB...")
 
 	database, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
@@ -37,9 +44,13 @@ func InitiateDatabase() {
 
 	for {
 		CTFString := fmt.Sprintf("CTF%v_", i)
-		CTFScore, err := strconv.Atoi(os.Getenv(CTFString + "SCORE"))
 
 		fmt.Println(fmt.Sprintf("Currently getting env. var. " + CTFString + "SCORE"))
+
+		CTFScoreString := os.Getenv(CTFString + "SCORE")
+
+		fmt.Println(CTFScoreString)
+		CTFScore, err := strconv.Atoi(CTFScoreString)
 
 		if err != nil {
 			fmt.Println("Error when initiating DB: " + err.Error())
@@ -51,7 +62,7 @@ func InitiateDatabase() {
 		CTFFlag := os.Getenv(CTFString + "FLAG")
 		CTFAccess := os.Getenv(CTFString + "ACCESS")
 		CTFDescription := os.Getenv(CTFString + "DESCRIPTION")
-		CTFHosted := strings.Contains(CTFDescription, "ami")
+		CTFHosted := strings.Contains(CTFAccess, "ami")
 
 		flag := models.Flag{Flag: CTFFlag, Description: CTFDescription, Score: CTFScore, Access: CTFAccess, Hosted: CTFHosted}
 

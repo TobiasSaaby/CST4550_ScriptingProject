@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import { BACKEND_URL } from "../../../static/static_values";
+import { BACKEND_URL } from "../../static/static_values";
 import { userStore } from "../../stores/store.user";
 	
 export const actions = {

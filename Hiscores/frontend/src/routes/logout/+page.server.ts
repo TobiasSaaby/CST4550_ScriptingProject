@@ -10,5 +10,4 @@ export const load = async ({cookies}: {cookies: any}) => {
 
 	throw redirect(302, '/');
 }
-	
 

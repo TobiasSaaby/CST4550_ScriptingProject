@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import { BACKEND_URL } from "../../../static/static_values";
+import { BACKEND_URL } from "../../static/static_values";
 import { userStore } from "../../stores/store.user";
 import type { User } from "src/models/model.user";
 	
@@ -13,15 +13,11 @@ export const actions = {
 		let respJson = await resp.json();
 		let userSignedIn: User = respJson.data;
 
-		cookies.set('session', userSignedIn, {
+		cookies.set('session', userSignedIn.username, {
 			path: '/',
 			secure: 0
 		})
 
-    	console.log(`login server user: ${userSignedIn}`)
-    	console.log(`login server cookie: ${JSON.stringify(cookies.get('session'))}`)
-
-		
 		throw redirect(307, '/');
 	}
 }

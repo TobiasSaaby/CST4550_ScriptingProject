@@ -5,6 +5,7 @@ import (
 	"main/controllers"
 	"main/handlers"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,7 @@ func main() {
 	fmt.Println("wtf", err)
 
 	r := gin.Default()
+	r.Use(cors.Default())
 
 	handlers.ConnectDatabase()
 	handlers.InitiateDatabase()

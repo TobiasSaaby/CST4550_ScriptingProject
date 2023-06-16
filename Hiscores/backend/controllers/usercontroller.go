@@ -9,8 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GET /books
-// Get all books
 func ShowAllUsers(c *gin.Context) {
 	var users []models.User
 	handlers.DB.Preload("Flags").Find(&users)
