@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
-	import { BACKEND_URL } from "../static/static_values"
+	import { BACKEND_URL } from "../static/static_values";
 	import type { User } from "src/models/model.user";
 	import type { Flag } from "src/models/model.flag";
+	import DeployButton from "../components/DeployButton.svelte";
 
 	export let data: {
 		user: string;
@@ -19,26 +19,21 @@
 			x.flags.reduce((xSum, xVal) => (xSum = xVal.score), 0)
 	);
 
-	let initCtf = (e) => {
-		console.log(e)
-	}
-
 	let submitFlag = async (event: any) => {
-		let fd = new FormData(event.target)
-		
-		let resp = await fetch(`http://${BACKEND_URL}/flags/submit`,
-            {
-                method: 'POST', 
-                body: JSON.stringify({username: user, flag: fd.get('flag')})
-            });
-        
-		if(resp.status == 200){
-			location.reload();
-        } else {
-			console.log('lolol');
-		}
-    }
+		let fd = new FormData(event.target);
 
+		let resp = await fetch(`http://${BACKEND_URL}/flags/submit`, {
+			method: "POST",
+			body: JSON.stringify({ username: user, flag: fd.get("flag") }),
+		});
+
+		if (resp.status == 200) {
+			location.reload();
+		} else {
+			// TODO: Handle error
+			location.reload();
+		}
+	};
 </script>
 
 <div class="wrapper">
@@ -57,7 +52,8 @@
 		<tbody>
 			{#each Object.keys(userTableData) as userData}
 				<tr
-					class={user && userTableData[Number(userData)].username == user
+					class={user &&
+					userTableData[Number(userData)].username == user
 						? "player"
 						: ""}
 				>
@@ -88,10 +84,6 @@
 	</div>
 {/if}
 
-<form on:submit|preventDefault={initCtf} class="">
-	<input type="submit" value="Submit" />
-</form>
-
 <div class="wrapper">
 	<h1>Flag details</h1>
 	<br />
@@ -113,13 +105,22 @@
 				<tr>
 					<td>{flag.description}</td>
 					{#if flag.hosted}
-						<td><button on:click={() => initCtf(flag.access)}> Init CTF </button></td>
+						<td
+							><DeployButton
+								imageId={flag.access}
+							/></td
+						>
 					{:else}
 						<td>{flag.access}</td>
 					{/if}
 					<td>{flag.score}</td>
 					{#if user}
-						<td>Status: {userFlags && userFlags.some(x => x.flag == flag.flag) ? "Completed!" : "Not done!"}</td>
+						<td
+							>Status: {userFlags &&
+							userFlags.some((x) => x.flag == flag.flag)
+								? "Completed!"
+								: "Not done!"}</td
+						>
 					{/if}
 				</tr>
 			{/each}
@@ -213,7 +214,7 @@
 		border-top-right-radius: 5px;
 		border-right: none;
 	}
-	
+
 	td {
 		padding: 7px 20px;
 		background: rgba(230, 230, 230, 1);
