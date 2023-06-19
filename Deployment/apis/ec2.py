@@ -9,8 +9,8 @@ class EC2Init(Resource):
     def __init__(self):
         self.client = client
     
-    def post(self):
-        return Initiate(self)
+    def get(self, name):
+        return Initiate(self, name)
     
 class EC2Term(Resource):
     def __init__(self):

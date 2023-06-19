@@ -2,16 +2,15 @@ import boto3
 
 from flask import request
 
-def Initiate(self):
-    data = request.get_json()
+def Initiate(self, name):
     reservation = self.client.run_instances(
-        ImageId = data["ImageId"],
+        ImageId = name,
         MaxCount = 1,
         MinCount = 1,
-        InstanceType = data["InstanceType"],
-        KeyName = data["KeyName"],
-        SecurityGroupIds = data["SecurityGroupIds"],
-        SubnetId = data["SubnetId"]
+        InstanceType = "t2.micro",
+        KeyName = "EC2CLIKeyPair",
+        SecurityGroupIds = ["sg-08e889680dc0d110e"],
+        SubnetId = "subnet-07b2af8574f976c6b"
     )
 
     print(reservation)

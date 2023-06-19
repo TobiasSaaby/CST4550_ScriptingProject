@@ -7,8 +7,8 @@ app = Flask(__name__)
 api = Api(app)
 
 api.add_resource(EC2Get, '/ec2/<string:name>')
-api.add_resource(EC2Init, '/ec2/init')
-api.add_resource(EC2Term, '/ec2/term')
+api.add_resource(EC2Init, '/ec2/init/<string:name>')
+api.add_resource(EC2Term, '/ec2/term/<string:name>')
 
 if __name__ == '__main__':
     app.run(debug=True)  
