@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { BACKEND_URL } from "../static/static_values";
 	import type { User } from "src/models/model.user";
-	import type { Flag } from "src/models/model.flag";
 	import DeployButton from "../components/DeployButton.svelte";
+    import type { Machine, UserMachine } from "src/models/model.machine";
 
 	export let data: {
 		user: string;
 		userTableData: User[];
-		flagTableData: Flag[];
-		userFlags: Flag[];
+		machineTableData: Machine[];
 	};
 
-	let { user, userTableData, flagTableData, userFlags } = data;
+	let { user, userTableData, machineTableData} = data;
 
 	userTableData = userTableData.sort(
 		(x, y) =>
@@ -101,25 +100,25 @@
 			</tr><tr />
 		</thead>
 		<tbody>
-			{#each flagTableData as flag}
+			{#each machineTableData as machine}
 				<tr>
-					<td>{flag.description}</td>
-					{#if flag.hosted}
+					<td>{machine.description}</td>
+					{#if machine.hosted}
 						<td
 							><DeployButton
-								imageId={flag.access}
+								machineId={machine.id}
+								imageId={machine.access}
+								ip={machine.state?.ip}
+								instanceId={machine.state?.instanceid}
 							/></td
 						>
 					{:else}
-						<td>{flag.access}</td>
+						<td>{machine.access}</td>
 					{/if}
-					<td>{flag.score}</td>
+					<td>{machine.score}</td>
 					{#if user}
 						<td
-							>Status: {userFlags &&
-							userFlags.some((x) => x.flag == flag.flag)
-								? "Completed!"
-								: "Not done!"}</td
+							>Status: {machine.state?.status || "Not done!"}</td
 						>
 					{/if}
 				</tr>

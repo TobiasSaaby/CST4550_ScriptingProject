@@ -30,6 +30,23 @@ def Terminate(self, name):
 
 
 def Fetch(self, name):
+
+    running_status = self.client.describe_instance_status(
+        InstanceIds=[name]
+    ).get("InstanceStatuses")
+
+    if len(running_status) < 1:
+        return ""
+
+    print(running_status)
+
+    status = running_status[0]["InstanceStatus"]["Status"]
+
+    print(status)
+
+    if(status != "ok"):
+        return ""
+
     reservations = self.client.describe_instances(
         InstanceIds=[name]
     ).get("Reservations")

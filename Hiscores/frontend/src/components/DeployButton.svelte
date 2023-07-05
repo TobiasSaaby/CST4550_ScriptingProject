@@ -3,21 +3,24 @@
 	import { BACKEND_URL } from "../static/static_values";
 	import { onMount } from "svelte";
 
-	export let imageId = "";
-	export let loading = false;
+	export let ip: string = "";
+	export let imageId: string = "";
+	export let machineId: number;
+	export let instanceId: string = "";
 
-	let ip = "";
 	let error = "";
-	let instanceId = "";
 
 	onMount(() => {
-		console.log("Check button status...");
+		if(instanceId){
+			checkState();
+		}
 	});
 
 	const init = async () => {
 		let resp = await fetch(`http://${BACKEND_URL}/machines/init`, {
 			method: "POST",
 			body: JSON.stringify({
+				machineid: machineId,
 				imageid: imageId,
 				username: $page.data.user,
 			}),
@@ -26,7 +29,10 @@
 
 		instanceId = respJson.status;
 
-		loading = true;
+		if(instanceId[0] != 'i'){
+			error = "Error when creating EC2 instance...";
+		}
+
 		checkState();
 	};
 
@@ -35,7 +41,8 @@
 			let resp = await fetch(`http://${BACKEND_URL}/machines`, {
 				method: "POST",
 				body: JSON.stringify({
-					imageid: instanceId,
+					machineid: machineId,
+					instanceid: instanceId,
 					username: $page.data.user,
 				}),
 			});
@@ -45,7 +52,6 @@
 			if (!respJson.ip) {
 				checkState();
 			} else {
-				loading = false;
 				ip = respJson.ip;
 			}
 		}, 3000);
@@ -55,14 +61,15 @@
 		let resp = await fetch(`http://${BACKEND_URL}/machines/terminate`, {
 			method: "POST",
 			body: JSON.stringify({
-				imageid: instanceId,
+				machineid: machineId,
+				instanceid: instanceId,
 				username: $page.data.user,
 			}),
 		});
 		let respJson = await resp.json();
 
 		ip = "";
-		loading = false;
+		instanceId = "";
 	};
 </script>
 
@@ -71,7 +78,7 @@
 		{ip}<button on:click={() => terminate()}>Terminate CTF</button>
 	{:else if error}
 		{error}
-	{:else if !loading}
+	{:else if !instanceId}
 		<button on:click={() => init()}> Initialize CTF </button>
 	{:else}
 		<button>Loading...</button>

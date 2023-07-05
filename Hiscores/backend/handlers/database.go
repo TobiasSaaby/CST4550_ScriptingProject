@@ -29,7 +29,14 @@ func ConnectDatabase() {
 		panic("Failed to connect to database!")
 	}
 
-	err = database.AutoMigrate(&models.User{}, &models.Flag{})
+	err = database.SetupJoinTable(&models.User{}, "Machines", &models.UserMachine{})
+
+	if err != nil {
+		fmt.Println(err.Error())
+		panic("Failed to create join table!")
+	}
+
+	err = database.AutoMigrate(&models.User{}, &models.Flag{}, &models.Machine{})
 	if err != nil {
 		return
 	}
@@ -59,14 +66,22 @@ func InitiateDatabase() {
 
 		fmt.Println(fmt.Sprintf("Creating %v flag!", i))
 
-		CTFFlag := os.Getenv(CTFString + "FLAG")
+		CTFFlags := strings.Split(os.Getenv(CTFString+"FLAG"), ", ")
 		CTFAccess := os.Getenv(CTFString + "ACCESS")
 		CTFDescription := os.Getenv(CTFString + "DESCRIPTION")
 		CTFHosted := strings.Contains(CTFAccess, "ami")
 
-		flag := models.Flag{Flag: CTFFlag, Description: CTFDescription, Score: CTFScore, Access: CTFAccess, Hosted: CTFHosted}
+		machine := models.Machine{ID: i, Access: CTFAccess, Description: CTFDescription, Hosted: CTFHosted, Flags: []models.Flag{}}
 
-		DB.Create(&flag)
+		for _, CTFFlag := range CTFFlags {
+			flag := models.Flag{Flag: string(CTFFlag), Score: CTFScore}
+
+			machine.Flags = append(machine.Flags, flag)
+
+			DB.Create(&flag)
+		}
+
+		DB.Create(&machine)
 
 		i++
 	}

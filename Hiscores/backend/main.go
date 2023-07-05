@@ -29,6 +29,8 @@ func main() {
 	r.POST("/flags/create", controllers.CreateFlag)
 	r.POST("/flags/submit", controllers.SubmitFlag)
 
+	r.GET("/machines", controllers.ShowAllMachines)
+	r.GET("/machines/:username", controllers.GetMachineStatusForUser)
 	r.POST("/machines", controllers.CheckInstance)
 	r.POST("/machines/init", controllers.InitInstance)
 	r.POST("/machines/terminate", controllers.TerminateInstance)

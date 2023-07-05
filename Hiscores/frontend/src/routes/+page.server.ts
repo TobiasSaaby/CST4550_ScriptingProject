@@ -1,23 +1,21 @@
-import { userStore } from "../stores/store.user";
-import { get } from "svelte/store";
-import { redirect } from "@sveltejs/kit";
 import { BACKEND_URL } from "../static/static_values"
+import type { UserMachine } from "src/models/model.machine";
 
 export const load = async ({locals}: {locals: any}) => {
     const reqUsers = await fetch(`http://${BACKEND_URL}/users`, {method: "GET"});
-    const reqFlags = await fetch(`http://${BACKEND_URL}/flags`, {method: "GET"});
+    const reqMachines = await fetch(`http://${BACKEND_URL}/machines`, {method: "GET"});
 
     const userTableData = (await reqUsers.json()).data;
-    const flagTableData = (await reqFlags.json()).data;
-    
-    let userFlags = [];
+    const machineTableData = (await reqMachines.json()).data;
     
     if(locals.user){
-        const reqUserFlags = await fetch(`http://${BACKEND_URL}/flags/${locals.user}`, {method: "GET"});
+        const reqUserMachines = await fetch(`http://${BACKEND_URL}/machines/${locals.user}`, {method: "GET"});
 
-        userFlags = (await reqUserFlags.json()).Flags;
+        let userMachineState: UserMachine[] = (await reqUserMachines.json()).machines;
+
+        userMachineState.map(x => machineTableData.find(y => y.id == x.machineid).state = x)
     }
     
-    return {userTableData, flagTableData, userFlags};
+    return {userTableData, machineTableData};
 }
 
