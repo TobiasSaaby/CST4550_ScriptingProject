@@ -52,7 +52,7 @@ func InitInstance(c *gin.Context) {
 
 	fmt.Println(userMachine)
 
-	req, err := http.Get("http://localhost:5000/ec2/init/" + initReq.ImageId)
+	req, err := http.Get("http://deployment:5000/ec2/init/" + initReq.ImageId)
 
 	if err != nil {
 		fmt.Println("Cannot connect to Deployment API")
@@ -93,7 +93,7 @@ func CheckInstance(c *gin.Context) {
 
 	fmt.Println(userMachine)
 
-	req, err := http.Get("http://localhost:5000/ec2/" + initReq.InstanceId)
+	req, err := http.Get("http://deployment:5000/ec2/" + initReq.InstanceId)
 
 	if err != nil {
 		fmt.Println("Cannot connect to Deployment API")
@@ -139,7 +139,7 @@ func TerminateInstance(c *gin.Context) {
 
 	fmt.Println(userMachine)
 
-	req, err := http.Get("http://localhost:5000/ec2/term/" + initReq.InstanceId)
+	req, err := http.Get("http://deployment:5000/ec2/term/" + initReq.InstanceId)
 
 	if err != nil {
 		fmt.Println("Cannot connect to Deployment API")

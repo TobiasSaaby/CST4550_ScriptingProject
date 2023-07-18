@@ -9,7 +9,7 @@ export const actions = {
 		const username = formData.get('username')
 		const password = formData.get('password')
 
-		let resp = await fetch(`http://${BACKEND_URL}/users/login`, { method: 'POST', body: JSON.stringify({ username, password }) });
+		let resp = await fetch(`${BACKEND_URL}/users/login`, { method: 'POST', body: JSON.stringify({ username, password }) });
 		let respJson = await resp.json();
 		let userSignedIn: User = respJson.data;
 

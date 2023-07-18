@@ -11,4 +11,4 @@ api.add_resource(EC2Init, '/ec2/init/<string:name>')
 api.add_resource(EC2Term, '/ec2/term/<string:name>')
 
 if __name__ == '__main__':
-    app.run(debug=True)  
+    app.run(host="0.0.0.0", debug=True)  

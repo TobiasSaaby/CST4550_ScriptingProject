@@ -18,7 +18,7 @@ func ConnectDatabase() {
 	envErr := godotenv.Load("../../.env")
 
 	if envErr != nil {
-		panic("Error loading .env file")
+		fmt.Println("Error loading .env file. Hoping that env. vars. have been imported...")
 	}
 
 	fmt.Println("Connecting to DB...")

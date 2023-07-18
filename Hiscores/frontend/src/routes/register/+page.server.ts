@@ -9,7 +9,7 @@ export const actions = {
 		const password = formData.get('password')
 		const repeat_password = formData.get('repPassword')
 
-		let resp = await fetch(`http://${BACKEND_URL}/users/register`, {method: 'POST', body: JSON.stringify({username, password, repeat_password})});
+		let resp = await fetch(`${BACKEND_URL}/users/register`, {method: 'POST', body: JSON.stringify({username, password, repeat_password})});
 		let respJson = await resp.json();
 
 		throw redirect(307, '/login');

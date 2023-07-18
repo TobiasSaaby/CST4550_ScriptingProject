@@ -7,7 +7,7 @@ def Initiate(self, name):
         ImageId = name,
         MaxCount = 1,
         MinCount = 1,
-        InstanceType = "t2.micro",
+        InstanceType = "t3.micro",
         KeyName = "EC2CLIKeyPair",
         SecurityGroupIds = ["sg-08e889680dc0d110e"],
         SubnetId = "subnet-07b2af8574f976c6b"

@@ -15,7 +15,12 @@ func main() {
 	fmt.Println("wtf", err)
 
 	r := gin.Default()
-	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"POST", "PUT", "PATCH", "DELETE"},
+		AllowHeaders: []string{"Content-Type,access-control-allow-origin, access-control-allow-headers"},
+	}))
+	// r.Use(cors.Default())
 
 	handlers.ConnectDatabase()
 	handlers.InitiateDatabase()

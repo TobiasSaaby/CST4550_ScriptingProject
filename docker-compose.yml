@@ -54,10 +54,26 @@ services:
     build:
       context: ./Hiscores/frontend
       dockerfile: Dockerfile
+      args:
+        PUBLIC_API_URL: ${API_URL}
+        PUBLIC_HOST_URL: ${HOST_URL}
     ports:
       - "5173:5173"
     depends_on:
       - backend
+    networks:
+      - shared
+
+  deployment:
+    build:
+      context: ./Deployment
+      dockerfile: Dockerfile
+      args:
+        AWS_REGION: ${AWS_REGION}
+        AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    ports:
+      - "5000:5000"
     networks:
       - shared
 

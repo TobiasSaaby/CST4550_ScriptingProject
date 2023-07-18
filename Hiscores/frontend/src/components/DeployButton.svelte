@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { BACKEND_URL } from "../static/static_values";
+	import { BACKEND_URL_CLIENT } from "../static/static_values";
 	import { onMount } from "svelte";
 
 	export let ip: string = "";
@@ -17,7 +17,7 @@
 	});
 
 	const init = async () => {
-		let resp = await fetch(`http://${BACKEND_URL}/machines/init`, {
+		let resp = await fetch(`${BACKEND_URL_CLIENT}/machines/init`, {
 			method: "POST",
 			body: JSON.stringify({
 				machineid: machineId,
@@ -38,7 +38,7 @@
 
 	const checkState = async () => {
 		setTimeout(async () => {
-			let resp = await fetch(`http://${BACKEND_URL}/machines`, {
+			let resp = await fetch(`${BACKEND_URL_CLIENT}/machines`, {
 				method: "POST",
 				body: JSON.stringify({
 					machineid: machineId,
@@ -58,7 +58,7 @@
 	};
 
 	const terminate = async () => {
-		let resp = await fetch(`http://${BACKEND_URL}/machines/terminate`, {
+		let resp = await fetch(`${BACKEND_URL_CLIENT}/machines/terminate`, {
 			method: "POST",
 			body: JSON.stringify({
 				machineid: machineId,

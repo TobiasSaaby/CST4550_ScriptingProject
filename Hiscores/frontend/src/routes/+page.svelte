@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BACKEND_URL } from "../static/static_values";
+	import { BACKEND_URL_CLIENT } from "../static/static_values";
 	import type { User } from "src/models/model.user";
 	import DeployButton from "../components/DeployButton.svelte";
     import type { Machine, UserMachine } from "src/models/model.machine";
@@ -21,7 +21,7 @@
 	let submitFlag = async (event: any) => {
 		let fd = new FormData(event.target);
 
-		let resp = await fetch(`http://${BACKEND_URL}/flags/submit`, {
+		let resp = await fetch(`${BACKEND_URL_CLIENT}/flags/submit`, {
 			method: "POST",
 			body: JSON.stringify({ username: user, flag: fd.get("flag") }),
 		});
