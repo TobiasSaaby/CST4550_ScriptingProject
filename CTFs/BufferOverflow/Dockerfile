@@ -3,7 +3,7 @@ FROM debian:latest
 ARG FLAG
 
 ## COPY ./01-disable-aslr.conf /etc/sysctl.d/
-RUN apt-get update && apt-get install -y build-essential gdb python2 gcc-multilib openssh-server
+RUN apt-get update && apt-get install -y build-essential gdb gcc-multilib openssh-server
 
 RUN useradd -ms /bin/bash bob
 RUN echo 'bob:bob' | chpasswd
