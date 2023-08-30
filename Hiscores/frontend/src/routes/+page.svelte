@@ -3,6 +3,7 @@
 	import type { User } from "src/models/model.user";
 	import DeployButton from "../components/DeployButton.svelte";
     import type { Machine, UserMachine } from "src/models/model.machine";
+    import Map from "../components/Map.svelte";
 
 	export let data: {
 		user: string;
@@ -34,6 +35,23 @@
 		}
 	};
 </script>
+
+{#if user}
+	<div class="wrapper">
+		<Map m={machineTableData}/>
+	</div>
+
+	<div class="wrapper">
+		<h1>Submit flag</h1>
+		<br />
+	</div>
+	<div class="wrapper">
+		<form on:submit|preventDefault={submitFlag} class="">
+			<input type="text" id="flag" name="flag" />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
+{/if}
 
 <div class="wrapper">
 	<h1>Hiscore</h1>
@@ -69,19 +87,6 @@
 		</tbody>
 	</table>
 </div>
-
-{#if user}
-	<div class="wrapper">
-		<h1>Submit flag</h1>
-		<br />
-	</div>
-	<div class="wrapper">
-		<form on:submit|preventDefault={submitFlag} class="">
-			<input type="text" id="flag" name="flag" />
-			<input type="submit" value="Submit" />
-		</form>
-	</div>
-{/if}
 
 <div class="wrapper">
 	<h1>Flag details</h1>

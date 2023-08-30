@@ -18,5 +18,8 @@
 	"/logout": [
 		"src/routes/logout/+page.server.ts",
 		"src/routes/+layout.server.ts"
+	],
+	"/map": [
+		"src/routes/+layout.server.ts"
 	]
 }
