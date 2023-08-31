@@ -1,7 +1,7 @@
-<script>
-	export let showModal; // boolean
+<script lang="ts">
+	export let showModal: Boolean;
 
-	let dialog; // HTMLDialogElement
+	let dialog: HTMLDialogElement;
 
 	$: if (dialog && showModal) dialog.showModal();
 </script>
@@ -10,16 +10,11 @@
 <dialog
 	bind:this={dialog}
 	on:close={() => (showModal = false)}
-	on:click|self={() => dialog.close()}
+	on:click|self={() => {dialog.close()}}
 >
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div on:click|stopPropagation>
 		<slot name="header" />
-		<hr />
 		<slot />
-		<hr />
-		<!-- svelte-ignore a11y-autofocus -->
-		<button autofocus on:click={() => dialog.close()}>close modal</button>
 	</div>
 </dialog>
 
@@ -29,6 +24,12 @@
 		border-radius: 0.2em;
 		border: none;
 		padding: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		padding: 40px;
+		box-sizing: border-box;
+		box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+		border-radius: 10px;
+		
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
@@ -57,8 +58,5 @@
 		to {
 			opacity: 1;
 		}
-	}
-	button {
-		display: block;
 	}
 </style>
