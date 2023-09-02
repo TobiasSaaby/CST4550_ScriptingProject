@@ -38,9 +38,11 @@ declare module '$env/static/private' {
 	export const HISTCONTROL: string;
 	export const XDG_MENU_PREFIX: string;
 	export const TERM_PROGRAM_VERSION: string;
+	export const VSCODE_INSPECTOR_OPTIONS: string;
 	export const HOSTNAME: string;
 	export const HISTSIZE: string;
 	export const NODE: string;
+	export const NODE_OPTIONS: string;
 	export const VDPAU_DRIVER: string;
 	export const SSH_AUTH_SOCK: string;
 	export const COLOR: string;
@@ -158,9 +160,11 @@ declare module '$env/dynamic/private' {
 		HISTCONTROL: string;
 		XDG_MENU_PREFIX: string;
 		TERM_PROGRAM_VERSION: string;
+		VSCODE_INSPECTOR_OPTIONS: string;
 		HOSTNAME: string;
 		HISTSIZE: string;
 		NODE: string;
+		NODE_OPTIONS: string;
 		VDPAU_DRIVER: string;
 		SSH_AUTH_SOCK: string;
 		COLOR: string;

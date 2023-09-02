@@ -11,7 +11,7 @@ export const load = async ({locals}: Parameters<LayoutServerLoad>[0]) => {
 
     const userTableData = (await reqUsers.json()).data;
     const machineTableData = (await reqMachines.json()).data;
-   console.log("us " + locals.user) 
+    
     if(locals.user){
         const reqUserMachines = await fetch(`${BACKEND_URL}/machines/${locals.user}`, {method: "GET"});
 

@@ -70,13 +70,11 @@ h1 {
 table {
   border-collapse: collapse;
   width: 100%;
-  margin: 20px auto;
   background-color: #111; /* Dark background color */
   color: #00ff00; /* Green text color */
 }
 
 th, td {
-  padding: 10px;
   text-align: center;
 }
 
@@ -96,8 +94,4 @@ tbody tr:nth-child(odd) {
   background-color: #111; /* Dark background for odd rows */
 }
 
-th:last-child,
-td:last-child {
-  text-align: center;
-}
 </style>
