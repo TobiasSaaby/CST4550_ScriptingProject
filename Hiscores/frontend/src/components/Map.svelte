@@ -5,16 +5,21 @@
     import type { Machine } from "../models/model.machine";
     import { userMachineStore } from "../stores/store.usermachine";
     import MachineDetails from "./modals/MachineDetails.svelte";
+    import AlertIcon from "../lib/images/alert.png";
+    import {countries} from "../../../countries"
 
     let m: Machine[];
     let map: any;
     let selected: Machine;
     let showModal: Boolean = false;
 
-    userMachineStore.subscribe(x => m = x)
+    let markerSize = "50"
+
+    userMachineStore.subscribe((x) => (m = x));
 
     onMount(() => {
-        mapboxgl.accessToken = "pk.eyJ1Ijoic2V2ZWxib2VuIiwiYSI6ImNsbHhocmZrNzJoMjUzZXBlMjExdHk4cm0ifQ.c_Zemr0BA-eNGfvjh0HTfg";
+        mapboxgl.accessToken =
+            "pk.eyJ1Ijoic2V2ZWxib2VuIiwiYSI6ImNsbHhocmZrNzJoMjUzZXBlMjExdHk4cm0ifQ.c_Zemr0BA-eNGfvjh0HTfg";
 
         map = new mapboxgl.Map({
             container: "map",
@@ -25,8 +30,19 @@
 
         map.on("load", () => {
             m.forEach((x) => {
-                let mark = new mapboxgl.Marker({ color: "black" })
-                    .setLngLat([10 * x.id, 10 * x.id])
+                let el = document.createElement("div");
+                
+                el.className = 'marker';
+                el.style.backgroundImage = `url(${AlertIcon})`;
+                el.style.width = `${markerSize}px`;
+                el.style.height = `${markerSize}px`;
+                el.style.backgroundSize = '100%';
+
+                const country = countries[Math.floor(Math.random()*countries.length)]
+
+                //let mark = new mapboxgl.Marker({ color: "black" })
+                    let mark = new mapboxgl.Marker(el)
+                    .setLngLat([country[1], country[0]])
                     .addTo(map);
 
                 mark.getElement().addEventListener("click", () => {
@@ -52,7 +68,7 @@
 
 <div id="map" class="map" />
 
-<MachineDetails bind:showModal machine={selected}/>
+<MachineDetails bind:showModal machine={selected} />
 
 <style>
     .map {

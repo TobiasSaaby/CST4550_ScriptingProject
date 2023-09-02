@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { BACKEND_URL } from "../../static/static_values";
     import Modal from "../Modal.svelte";
 
     export let showModal = false;
@@ -8,7 +9,7 @@
         repPassword: string
     }
 
-    const submitForm = (e: any) => {
+    const submitForm = async (e: any) => {
         let formData = new FormData(e.target)
 
         entryData = {
@@ -17,6 +18,9 @@
             repPassword: formData.get("repPassword")?.toString() ?? ""
         }
 
+		let resp = await fetch(`${BACKEND_URL}/users/register`, {method: 'POST', body: JSON.stringify(entryData)});
+		let respJson = await resp.json();
+        //TODO: Set token in store
     };
 
 </script>
@@ -71,10 +75,10 @@
         width: 100%;
         padding: 10px 0;
         font-size: 16px;
-        color: #fff;
+        color: #313131;
         margin-bottom: 30px;
         border: none;
-        border-bottom: 1px solid #fff;
+        border-bottom: 1px solid #313131;
         outline: none;
         background: transparent;
     }
@@ -84,7 +88,7 @@
         left: 0;
         padding: 10px 0;
         font-size: 16px;
-        color: #fff;
+        color: #313131;
         pointer-events: none;
         transition: 0.5s;
     }

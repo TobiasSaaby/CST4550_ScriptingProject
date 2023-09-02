@@ -2,16 +2,16 @@
   import { userStore } from "../stores/store.user";
   import Machines from "../components/modals/Machines.svelte";
   import Hiscore from "../components/modals/Hiscore.svelte";
-    import Login from "../components/modals/Login.svelte";
-    import Register from "../components/modals/Register.svelte";
-  
+  import Login from "../components/modals/Login.svelte";
+  import Register from "../components/modals/Register.svelte";
+
   let u: any;
   let showMachinesModal = false;
   let showHiscoresModal = false;
   let showLoginModal = false;
   let showRegisterModal = false;
 
-  userStore.subscribe((x) => u = x);
+  userStore.subscribe((x) => (u = x));
 </script>
 
 <link
@@ -21,23 +21,42 @@
 <header>
   <!-- svelte-ignore a11y-missing-attribute -->
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <a on:click={() => (console.log(u))}
-    ><img
-      src="https://github.com/ecemgo/today-i-learned-app/assets/13468728/4f2923ea-9eca-4221-8b18-7198f78fd04e"
-      alt="logo"
-      class="logo"
-    /></a
-  >
-
+  {#if u}<a on:click={() => console.log(u)}
+      ><img
+        src="https://github.com/ecemgo/today-i-learned-app/assets/13468728/4f2923ea-9eca-4221-8b18-7198f78fd04e"
+        alt="logo"
+        class="logo"
+      /></a
+    >
+  {:else}
+    <a />
+  {/if}
   <nav class="navbar">
-    <a on:click={() => showMachinesModal = true} class="nav-item" style="--i: 0">Machines</a>
-    <a on:click={() => showHiscoresModal = true} class="nav-item" style="--i: 0">Hiscores</a>
+    <a
+      on:click={() => (showMachinesModal = true)}
+      class="nav-item"
+      style="--i: 0">Machines</a
+    >
+    <a
+      on:click={() => (showHiscoresModal = true)}
+      class="nav-item"
+      style="--i: 0">Hiscores</a
+    >
     {#if !u}
-    <a on:click={() => showRegisterModal = true} class="nav-item" style="--i: 0">Register</a>
-    <a on:click={() => showLoginModal = true} class="nav-item" style="--i: 0">Login</a>
-    {/if}
-    {#if u}
-    <a on:click={() => userStore.set("")}  class="nav-item" style="--i: 0">Logout</a>
+      <a
+        on:click={() => (showRegisterModal = true)}
+        class="nav-item"
+        style="--i: 0">Register</a
+      >
+      <a
+        on:click={() => (showLoginModal = true)}
+        class="nav-item"
+        style="--i: 0">Login</a
+      >
+    {:else}
+      <a on:click={() => userStore.set("")} class="nav-item" style="--i: 0"
+        >Logout</a
+      >
     {/if}
   </nav>
 </header>

@@ -58,7 +58,46 @@
 </div>
 </Modal>
 <style>
-    h1, tr {
-        color: #01b118d0;
-    }
+
+.wrapper {
+  text-align: center;
+}
+
+h1 {
+  color: #00ff00; /* Green text color */
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px auto;
+  background-color: #111; /* Dark background color */
+  color: #00ff00; /* Green text color */
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #000; /* Black header background */
+}
+
+th, td {
+  border-bottom: 1px solid #00ff00; /* Green border for cells */
+}
+
+tbody tr:nth-child(even) {
+  background-color: #222; /* Slightly lighter background for even rows */
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #111; /* Dark background for odd rows */
+}
+
+th:last-child,
+td:last-child {
+  text-align: center;
+}
 </style>
