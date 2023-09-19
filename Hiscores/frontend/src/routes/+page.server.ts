@@ -1,21 +1,21 @@
 import { BACKEND_URL } from "../static/static_values"
-import type { UserMachine } from "src/models/model.machine";
+import type { UserChallenge } from "src/models/model.challenge";
 
 export const load = async ({locals}: {locals: any}) => {
     const reqUsers = await fetch(`${BACKEND_URL}/users`, {method: "GET"});
-    const reqMachines = await fetch(`${BACKEND_URL}/machines`, {method: "GET"});
+    const reqChallenges = await fetch(`${BACKEND_URL}/challenges`, {method: "GET"});
 
     const userTableData = (await reqUsers.json()).data;
-    const machineTableData = (await reqMachines.json()).data;
+    const challengeTableData = (await reqChallenges.json()).data;
     
     if(locals.user){
-        const reqUserMachines = await fetch(`${BACKEND_URL}/machines/${locals.user}`, {method: "GET"});
+        const reqUserChallenges = await fetch(`${BACKEND_URL}/challenges/${locals.user}`, {method: "GET"});
 
-        let userMachineState: UserMachine[] = (await reqUserMachines.json()).machines;
+        let userChallengeState: UserChallenge[] = (await reqUserChallenges.json()).challenges;
 
-        userMachineState.map(x => machineTableData.find(y => y.id == x.machineid).state = x)
+        userChallengeState.map(x => challengeTableData.find(y => y.id == x.challengeid).state = x)
     }
     
-    return {userTableData, machineTableData};
+    return {userTableData, challengeTableData};
 }
 

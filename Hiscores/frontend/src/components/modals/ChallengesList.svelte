@@ -1,16 +1,16 @@
 <script lang="ts">
     import { userStore } from "../../stores/store.user";
-    import { userMachineStore } from "../../stores/store.usermachine";
+    import { userChallengeStore } from "../../stores/store.userchallenge";
     import DeployButton from "../DeployButton.svelte";
     import Modal from "../Modal.svelte";
 
     export let showModal = false;
     
     let user: any;
-    let machineTableData: any;
+    let challengeTableData: any;
 
     userStore.subscribe(x => user = x);
-    userMachineStore.subscribe(x => machineTableData = x);
+    userChallengeStore.subscribe(x => challengeTableData = x);
 </script>
 <Modal bind:showModal>
 <div class="wrapper">
@@ -30,25 +30,20 @@
 			</tr><tr />
 		</thead>
 		<tbody>
-			{#each machineTableData as machine}
+			{#each challengeTableData as challenge}
 				<tr>
-					<td>{machine.description}</td>
-					{#if machine.hosted}
+					<td>{challenge.description}</td>
+					{#if challenge.hosted}
 						<td
-							><DeployButton
-								machineId={machine.id}
-								imageId={machine.access}
-								ip={machine.state?.ip}
-								instanceId={machine.state?.instanceid}
-							/></td
+							><DeployButton bind:challenge /></td
 						>
 					{:else}
-						<td>{machine.access}</td>
+						<td>{challenge.access}</td>
 					{/if}
-					<td>{machine.score}</td>
+					<td>{challenge.score}</td>
 					{#if user}
 						<td
-							>Status: {machine.state?.status || "Not done!"}</td
+							>Status: {challenge.state?.status || "Not done!"}</td
 						>
 					{/if}
 				</tr>

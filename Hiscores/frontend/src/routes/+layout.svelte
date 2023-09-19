@@ -1,18 +1,18 @@
 <script lang="ts">
-    import type { Machine } from '../models/model.machine';
+    import type { Challenge } from '../models/model.challenge';
     import { userStore } from '../stores/store.user';
 	import Nav from './Nav.svelte';
     import type { User } from '../models/model.user';
     import { userTableStore } from '../stores/store.usertable';
-    import { userMachineStore } from '../stores/store.usermachine';
+    import { userChallengeStore } from '../stores/store.userchallenge';
 
 	export let data: {
 		user: string;
 		userTableData: User[];
-		machineTableData: Machine[];
+		challengeTableData: Challenge[];
 	};
 
-	let {user, userTableData, machineTableData} = data;
+	let {user, userTableData, challengeTableData} = data;
 
 	userTableData = userTableData.sort(
 		(x, y) =>
@@ -22,7 +22,7 @@
 
 	userStore.set(user)
 	userTableStore.set(userTableData)
-	userMachineStore.set(machineTableData)
+	userChallengeStore.set(challengeTableData)
 </script>
 
 <Nav />

@@ -1,10 +1,10 @@
 package models
 
 type Flag struct {
-	Flag      string `json:"flag" gorm:"primary_key"`
-	Score     int    `json:"score"`
-	Hint      string `json:"hint"`
-	MachineID int    `json:"machineid"`
+	Flag        string `json:"flag" gorm:"primary_key"`
+	Score       int    `json:"score"`
+	Hint        string `json:"hint"`
+	ChallengeID int    `json:"challengeid"`
 }
 
 type SubmitFlag struct {

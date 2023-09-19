@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"main/models"
+	"main/utils"
 	"os"
 	"strconv"
 	"strings"
@@ -29,14 +30,14 @@ func ConnectDatabase() {
 		panic("Failed to connect to database!")
 	}
 
-	err = database.SetupJoinTable(&models.User{}, "Machines", &models.UserMachine{})
+	err = database.SetupJoinTable(&models.User{}, "Challenges", &models.UserChallenge{})
 
 	if err != nil {
 		fmt.Println(err.Error())
 		panic("Failed to create join table!")
 	}
 
-	err = database.AutoMigrate(&models.User{}, &models.Flag{}, &models.Machine{})
+	err = database.AutoMigrate(&models.User{}, &models.Flag{}, &models.Challenge{})
 	if err != nil {
 		return
 	}
@@ -69,19 +70,19 @@ func InitiateDatabase() {
 		CTFFlags := strings.Split(os.Getenv(CTFString+"FLAG"), ", ")
 		CTFAccess := os.Getenv(CTFString + "ACCESS")
 		CTFDescription := os.Getenv(CTFString + "DESCRIPTION")
-		CTFHosted := strings.Contains(CTFAccess, "ami")
+		CTFType := utils.AccessToType(CTFAccess)
 
-		machine := models.Machine{ID: i, Access: CTFAccess, Description: CTFDescription, Hosted: CTFHosted, Flags: []models.Flag{}}
+		challenge := models.Challenge{ID: i, Access: CTFAccess, Description: CTFDescription, Type: CTFType, Flags: []models.Flag{}}
 
 		for _, CTFFlag := range CTFFlags {
 			flag := models.Flag{Flag: string(CTFFlag), Score: CTFScore}
 
-			machine.Flags = append(machine.Flags, flag)
+			challenge.Flags = append(challenge.Flags, flag)
 
 			DB.Create(&flag)
 		}
 
-		DB.Create(&machine)
+		DB.Create(&challenge)
 
 		i++
 	}

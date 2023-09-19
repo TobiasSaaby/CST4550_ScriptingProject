@@ -2,20 +2,18 @@
     import { onMount } from "svelte";
     import mapboxgl from "mapbox-gl";
     import "mapbox-gl/dist/mapbox-gl.css";
-    import type { Machine } from "../models/model.machine";
-    import { userMachineStore } from "../stores/store.usermachine";
-    import MachineDetails from "./modals/MachineDetails.svelte";
-    import AlertIcon from "../lib/images/alert.png";
-    import {countries} from "../../../countries"
+    import type { Challenge } from "../models/model.challenge";
+    import { userChallengeStore } from "../stores/store.userchallenge";
+    import ChallengeDetails from "./modals/ChallengeDetails.svelte";
+    import { countries } from "../../../countries";
+    import { getMarkerIcon } from "$lib/dynamics/markers";
 
-    let m: Machine[];
+    let m: Challenge[];
     let map: any;
-    let selected: Machine;
+    let selected: Challenge;
     let showModal: Boolean = false;
 
-    let markerSize = "50"
-
-    userMachineStore.subscribe((x) => (m = x));
+    userChallengeStore.subscribe((x) => (m = x));
 
     onMount(() => {
         mapboxgl.accessToken =
@@ -30,18 +28,9 @@
 
         map.on("load", () => {
             m.forEach((x) => {
-                let el = document.createElement("div");
-                
-                el.className = 'marker';
-                el.style.backgroundImage = `url(${AlertIcon})`;
-                el.style.width = `${markerSize}px`;
-                el.style.height = `${markerSize}px`;
-                el.style.backgroundSize = '100%';
+                const country = countries[Math.floor(Math.random() * countries.length)];
 
-                const country = countries[Math.floor(Math.random()*countries.length)]
-
-                //let mark = new mapboxgl.Marker({ color: "black" })
-                    let mark = new mapboxgl.Marker(el)
+                let mark = new mapboxgl.Marker(getMarkerIcon(x?.type, x?.state?.state))
                     .setLngLat([country[1], country[0]])
                     .addTo(map);
 
@@ -49,26 +38,24 @@
                     selected = x;
                     showModal = true;
                 });
+
+                x.marker = mark;
             });
-
-            const elements = document.getElementsByClassName(
-                "mapboxgl-ctrl-bottom-right"
-            );
-
-            while (
-                elements.length > 0 &&
-                elements[0] &&
-                elements[0].parentNode
-            ) {
-                elements[0].parentNode.removeChild(elements[0]);
-            }
         });
+
+        const elements = document.getElementsByClassName(
+            "mapboxgl-ctrl-bottom-right"
+        );
+
+        while (elements.length > 0 && elements[0] && elements[0].parentNode) {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
     });
 </script>
 
 <div id="map" class="map" />
 
-<MachineDetails bind:showModal machine={selected} />
+<ChallengeDetails bind:showModal bind:challenge={selected} />
 
 <style>
     .map {

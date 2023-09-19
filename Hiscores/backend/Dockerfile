@@ -1,5 +1,8 @@
 FROM golang:latest
 
+ARG PUBLIC_DEPLOY_URL
+ENV PUBLIC_DEPLOY_URL $PUBLIC_DEPLOY_URL
+
 WORKDIR /app
 
 COPY . .
@@ -9,6 +12,5 @@ RUN go build
 
 EXPOSE 8080
 
-RUN echo $CTF1_SCORE
-
 CMD ["./main" ]
+

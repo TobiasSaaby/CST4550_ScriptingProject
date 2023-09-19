@@ -1,24 +1,27 @@
 // @ts-nocheck
 import type { LayoutServerLoad } from './$types'
 import { BACKEND_URL } from "../static/static_values";
-import type { UserMachine } from "../models/model.machine";
+import type { Challenge, UserChallenge } from "../models/model.challenge";
 
 // get `locals.user` and pass it to the `page` store
-export const load = async ({locals}: Parameters<LayoutServerLoad>[0]) => {
+export const load = async ({ locals }: Parameters<LayoutServerLoad>[0]) => {
 
-    const reqUsers = await fetch(`${BACKEND_URL}/users`, {method: "GET"});
-    const reqMachines = await fetch(`${BACKEND_URL}/machines`, {method: "GET"});
+    const reqUsers = await fetch(`${BACKEND_URL}/users`, { method: "GET" });
+    const reqChallenges = await fetch(`${BACKEND_URL}/challenges`, { method: "GET" });
 
     const userTableData = (await reqUsers.json()).data;
-    const machineTableData = (await reqMachines.json()).data;
-    
-    if(locals.user){
-        const reqUserMachines = await fetch(`${BACKEND_URL}/machines/${locals.user}`, {method: "GET"});
+    const challengeTableData: Challenge[] = (await reqChallenges.json()).data;
+    console.log("us " + locals.user)
+    if (locals.user) {
+        const reqUserChallenges = await fetch(`${BACKEND_URL}/challenges/${locals.user}`, { method: "GET" });
 
-        let userMachineState: UserMachine[] = (await reqUserMachines.json()).machines;
+        let userChallengeState: UserChallenge[] = (await reqUserChallenges.json()).challenges;
 
-        userMachineState.map(x => machineTableData.find(y => y.id == x.machineid).state = x)
+        challengeTableData.forEach(x =>
+            x.state = userChallengeState.find(y => y.challengeid == x.id) ?? {}
+        );
+
     }
-    
-    return {user: locals.user, userTableData, machineTableData};
+
+    return { user: locals.user, userTableData, challengeTableData };
 }

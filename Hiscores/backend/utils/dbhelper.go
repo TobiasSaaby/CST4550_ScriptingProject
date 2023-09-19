@@ -5,11 +5,11 @@ import (
 	"strconv"
 )
 
-func CompareUserMachineFlags(user models.User, machineFlags []models.Flag) string {
-	total := len(machineFlags)
+func CompareUserChallengeFlags(user models.User, challengeFlags []models.Flag) string {
+	total := len(challengeFlags)
 	solved := 0
 
-	for _, flag := range machineFlags {
+	for _, flag := range challengeFlags {
 		if ContainsFlag(user.Flags, flag) {
 			solved += 1
 		}

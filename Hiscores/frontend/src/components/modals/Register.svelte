@@ -18,7 +18,7 @@
             repPassword: formData.get("repPassword")?.toString() ?? ""
         }
 
-		let resp = await fetch(`${BACKEND_URL}/users/register`, {method: 'POST', body: JSON.stringify(entryData)});
+		let resp = await fetch(`${BACKEND_URL}/users/register`, {method: 'POST', body: JSON.stringify({username: entryData.username, password: entryData.password, repeat_password: entryData.repPassword})});
 		let respJson = await resp.json();
         //TODO: Set token in store
     };

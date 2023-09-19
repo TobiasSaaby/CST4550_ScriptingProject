@@ -5,41 +5,42 @@ import (
 	"io/ioutil"
 	"main/handlers"
 	"main/models"
+	"main/utils"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
-func ShowAllMachines(c *gin.Context) {
-	var machines []models.Machine
-	var resMachines []models.MachineGetResponse
+func ShowAllChallenges(c *gin.Context) {
+	var challenges []models.Challenge
+	var resChallenges []models.ChallengeGetResponse
 
-	handlers.DB.Find(&machines)
+	handlers.DB.Find(&challenges)
 
-	for _, machine := range machines {
-		resMachines = append(resMachines, models.MachineGetResponse{ID: machine.ID, Hosted: machine.Hosted, Description: machine.Description, Access: machine.Access, Score: 200})
+	for _, challenge := range challenges {
+		resChallenges = append(resChallenges, models.ChallengeGetResponse{ID: challenge.ID, Type: challenge.Type, Description: challenge.Description, Access: challenge.Access, Score: 200})
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": resMachines})
+	c.JSON(http.StatusOK, gin.H{"data": resChallenges})
 }
 
-func GetMachineStatusForUser(c *gin.Context) {
-	var userMachines []models.UserMachine
+func GetChallengeStatusForUser(c *gin.Context) {
+	var userChallenges []models.UserChallenge
 
-	if err := handlers.DB.Where("user_username = ?", c.Param("username")).Find(&userMachines).Error; err != nil {
-		fmt.Println("Machines not found")
+	if err := handlers.DB.Where("user_username = ?", c.Param("username")).Find(&userChallenges).Error; err != nil {
+		fmt.Println("Challenges not found")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"machines": userMachines})
+	c.JSON(http.StatusOK, gin.H{"challenges": userChallenges})
 }
 
 func InitInstance(c *gin.Context) {
 	fmt.Println("Init")
-	var initReq models.MachineInitRequest
-	var userMachine models.UserMachine
+	var initReq models.ChallengeInitRequest
+	var userChallenge models.UserChallenge
 
 	if err := c.ShouldBindJSON(&initReq); err != nil {
 		fmt.Println("Not binding to JSON")
@@ -47,12 +48,12 @@ func InitInstance(c *gin.Context) {
 		return
 	}
 
-	userMachine = models.UserMachine{UserUsername: initReq.Username, MachineID: initReq.MachineId}
-	handlers.DB.First(&userMachine)
+	userChallenge = models.UserChallenge{UserUsername: initReq.Username, ChallengeID: initReq.ChallengeId}
+	handlers.DB.First(&userChallenge)
 
-	fmt.Println(userMachine)
+	fmt.Println(userChallenge)
 
-	req, err := http.Get("http://deployment:5000/ec2/init/" + initReq.ImageId)
+	req, err := http.Get(utils.DeploymentURL + "/ec2/init/" + initReq.ImageId)
 
 	if err != nil {
 		fmt.Println("Cannot connect to Deployment API")
@@ -70,17 +71,19 @@ func InitInstance(c *gin.Context) {
 
 	idDirty := strings.TrimSpace(string(res))
 	id := strings.Trim(idDirty, "\"")
-	userMachine.InstanceId = id
 
-	handlers.DB.Save(&userMachine)
+	userChallenge.InstanceId = id
+	userChallenge.State = models.Initialising
+
+	handlers.DB.Save(&userChallenge)
 
 	c.JSON(http.StatusOK, gin.H{"status": id})
 }
 
 func CheckInstance(c *gin.Context) {
 	fmt.Println("Check")
-	var initReq models.MachineCheckRequest
-	var userMachine models.UserMachine
+	var initReq models.ChallengeCheckRequest
+	var userChallenge models.UserChallenge
 
 	if err := c.ShouldBindJSON(&initReq); err != nil {
 		fmt.Println("Not binding to JSON")
@@ -88,12 +91,12 @@ func CheckInstance(c *gin.Context) {
 		return
 	}
 
-	userMachine = models.UserMachine{UserUsername: initReq.Username, MachineID: initReq.MachineId}
-	handlers.DB.First(&userMachine)
+	userChallenge = models.UserChallenge{UserUsername: initReq.Username, ChallengeID: initReq.ChallengeId}
+	handlers.DB.First(&userChallenge)
 
-	fmt.Println(userMachine)
+	fmt.Println(userChallenge)
 
-	req, err := http.Get("http://deployment:5000/ec2/" + initReq.InstanceId)
+	req, err := http.Get(utils.DeploymentURL + "/ec2/" + initReq.InstanceId)
 
 	if err != nil {
 		fmt.Println("Cannot connect to Deployment API")
@@ -116,17 +119,18 @@ func CheckInstance(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"ip": ""})
 	}
 
-	userMachine.IP = ip
+	userChallenge.IP = ip
+	userChallenge.State = models.Running
 
-	handlers.DB.Save(&userMachine)
+	handlers.DB.Save(&userChallenge)
 
 	c.JSON(http.StatusOK, gin.H{"ip": ip})
 }
 
 func TerminateInstance(c *gin.Context) {
 	fmt.Println("Terminate")
-	var initReq models.MachineTermRequest
-	var userMachine models.UserMachine
+	var initReq models.ChallengeTermRequest
+	var userChallenge models.UserChallenge
 
 	if err := c.ShouldBindJSON(&initReq); err != nil {
 		fmt.Println("Not binding to JSON")
@@ -134,12 +138,12 @@ func TerminateInstance(c *gin.Context) {
 		return
 	}
 
-	userMachine = models.UserMachine{UserUsername: initReq.Username, MachineID: initReq.MachineId}
-	handlers.DB.First(&userMachine)
+	userChallenge = models.UserChallenge{UserUsername: initReq.Username, ChallengeID: initReq.ChallengeId}
+	handlers.DB.First(&userChallenge)
 
-	fmt.Println(userMachine)
+	fmt.Println(userChallenge)
 
-	req, err := http.Get("http://deployment:5000/ec2/term/" + initReq.InstanceId)
+	req, err := http.Get(utils.DeploymentURL + "/ec2/term/" + initReq.InstanceId)
 
 	if err != nil {
 		fmt.Println("Cannot connect to Deployment API")
@@ -157,10 +161,11 @@ func TerminateInstance(c *gin.Context) {
 
 	fmt.Println(string(res))
 
-	userMachine.InstanceId = ""
-	userMachine.IP = ""
+	userChallenge.InstanceId = ""
+	userChallenge.IP = ""
+	userChallenge.State = models.Started
 
-	handlers.DB.Save(&userMachine)
+	handlers.DB.Save(&userChallenge)
 
 	c.JSON(http.StatusOK, gin.H{"status": "terminating"})
 }

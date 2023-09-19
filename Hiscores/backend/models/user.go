@@ -1,10 +1,10 @@
 package models
 
 type User struct {
-	Username string    `json:"username" gorm:"primary_key"`
-	Password string    `json:"password"`
-	Machines []Machine `json:"machines" gorm:"many2many:user_machines"`
-	Flags    []Flag    `json:"flags" gorm:"many2many:user_flags"`
+	Username   string      `json:"username" gorm:"primary_key"`
+	Password   string      `json:"password"`
+	Challenges []Challenge `json:"challenges" gorm:"many2many:user_challenges"`
+	Flags      []Flag      `json:"flags" gorm:"many2many:user_flags"`
 }
 
 type RegisterUserRequest struct {

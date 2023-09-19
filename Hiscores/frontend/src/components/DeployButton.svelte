@@ -1,35 +1,38 @@
 <script lang="ts">
 	import { page } from "$app/stores";
+    import { challengeState, type Challenge, type UserChallenge } from "../models/model.challenge";
 	import { BACKEND_URL_CLIENT } from "../static/static_values";
 	import { onMount } from "svelte";
+    import { getChallengeStateColour } from "../utils/util.mapbox";
+    import { getMarkerIcon, getMarkerIconInner, serverIcon } from "$lib/dynamics/markers";
+    import { Marker } from "mapbox-gl";
 
-	export let ip: string = "";
-	export let imageId: string = "";
-	export let machineId: number;
-	export let instanceId: string = "";
+	export let challenge: Challenge;
 
 	let error = "";
 
 	onMount(() => {
-		if (instanceId) {
+		if (challenge?.state?.instanceid) {
 			checkState();
 		}
 	});
 
 	const init = async () => {
-		let resp = await fetch(`${BACKEND_URL_CLIENT}/machines/init`, {
+		challenge.marker.getElement().innerHTML = getMarkerIconInner(challenge?.type, challengeState.Initialising);
+
+		let resp = await fetch(`${BACKEND_URL_CLIENT}/challenges/init`, {
 			method: "POST",
 			body: JSON.stringify({
-				machineid: machineId,
-				imageid: imageId,
+				challengeid: challenge.id,
+				imageid: challenge.access,
 				username: $page.data.user,
 			}),
 		});
 		let respJson = await resp.json();
+	
+		challenge.state.instanceid = respJson.status;
 
-		instanceId = respJson.status;
-
-		if (instanceId[0] != "i") {
+		if (challenge.state?.instanceid && challenge.state.instanceid.length > 0 && challenge.state.instanceid[0] != "i") {
 			error = "Error when creating EC2 instance...";
 		}
 
@@ -38,11 +41,11 @@
 
 	const checkState = async () => {
 		setTimeout(async () => {
-			let resp = await fetch(`${BACKEND_URL_CLIENT}/machines`, {
+			let resp = await fetch(`${BACKEND_URL_CLIENT}/challenges`, {
 				method: "POST",
 				body: JSON.stringify({
-					machineid: machineId,
-					instanceid: instanceId,
+					challengeid: challenge.id,
+					instanceid: challenge.state.instanceid,
 					username: $page.data.user,
 				}),
 			});
@@ -52,39 +55,33 @@
 			if (!respJson.ip) {
 				checkState();
 			} else {
-				ip = respJson.ip;
+				challenge.state.ip = respJson.ip;
+				challenge.marker.getElement().innerHTML = getMarkerIconInner(challenge?.type, challengeState.Running);
 			}
 		}, 3000);
 	};
 
 	const terminate = async () => {
-		let resp = await fetch(`${BACKEND_URL_CLIENT}/machines/terminate`, {
+		challenge.marker.getElement().innerHTML = getMarkerIconInner(challenge?.type, challengeState.Started);
+		let resp = await fetch(`${BACKEND_URL_CLIENT}/challenges/terminate`, {
 			method: "POST",
 			body: JSON.stringify({
-				machineid: machineId,
-				instanceid: instanceId,
+				challengeid: challenge.id,
+				instanceid: challenge.state.instanceid,
 				username: $page.data.user,
 			}),
 		});
 		let respJson = await resp.json();
+		// TODO: Check response
 
-		ip = "";
-		instanceId = "";
+		
+		challenge.state.ip = "";
+		challenge.state.instanceid = "";
 	};
 </script>
 
 <div class="form">
-	{#if ip}
-		{ip}<button on:click={() => terminate()}>
-			<span />
-			<span />
-			<span />
-			<span />
-			Terminate CTF
-		</button>
-	{:else if error}
-		{error}
-	{:else if !instanceId}
+	{#if !challenge?.state || !challenge.state.instanceid}
 		<button on:click={() => init()}>
 			<span />
 			<span />
@@ -92,6 +89,16 @@
 			<span />
 			Initialize CTF
 		</button>
+	{:else if challenge.state.ip}
+		{challenge.state.ip}<button on:click={() => terminate()}>
+			<span />
+			<span />
+			<span />
+			<span />
+			Terminate CTF
+		</button>
+	{:else if error}
+		{error}	
 	{:else}
 		<button>
 			<span />

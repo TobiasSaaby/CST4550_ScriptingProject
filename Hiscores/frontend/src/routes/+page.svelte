@@ -26,10 +26,10 @@
 	<!-- 
 {#if user}
 	<div class="wrapper">
-		<Map2 m={machineTableData}/>
+		<Map2 m={challengeTableData}/>
 	</div>
 	<div class="wrapper">
-		<Map m={machineTableData}/>
+		<Map m={challengeTableData}/>
 	</div>
 
 	<div class="wrapper">

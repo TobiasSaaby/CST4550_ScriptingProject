@@ -1,12 +1,12 @@
 <script lang="ts">
   import { userStore } from "../stores/store.user";
-  import Machines from "../components/modals/Machines.svelte";
+  import Challenges from "../components/modals/ChallengesList.svelte";
   import Hiscore from "../components/modals/Hiscore.svelte";
   import Login from "../components/modals/Login.svelte";
   import Register from "../components/modals/Register.svelte";
 
   let u: any;
-  let showMachinesModal = false;
+  let showChallengesModal = false;
   let showHiscoresModal = false;
   let showLoginModal = false;
   let showRegisterModal = false;
@@ -33,9 +33,9 @@
   {/if}
   <nav class="navbar">
     <a
-      on:click={() => (showMachinesModal = true)}
+      on:click={() => (showChallengesModal = true)}
       class="nav-item"
-      style="--i: 0">Machines</a
+      style="--i: 0">Challenges</a
     >
     <a
       on:click={() => (showHiscoresModal = true)}
@@ -61,7 +61,7 @@
   </nav>
 </header>
 
-<Machines bind:showModal={showMachinesModal} />
+<Challenges bind:showModal={showChallengesModal} />
 <Hiscore bind:showModal={showHiscoresModal} />
 <Login bind:showModal={showLoginModal} />
 <Register bind:showModal={showRegisterModal} />

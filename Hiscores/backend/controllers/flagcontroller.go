@@ -14,8 +14,8 @@ func SubmitFlag(c *gin.Context) {
 	var submitFlag models.SubmitFlag
 	var user models.User
 	var flag models.Flag
-	var machineFlags []models.Flag
-	var userMachine models.UserMachine
+	var challengeFlags []models.Flag
+	var userChallenge models.UserChallenge
 
 	if err := c.ShouldBindJSON(&submitFlag); err != nil {
 		fmt.Println("Request not binding...")
@@ -35,9 +35,9 @@ func SubmitFlag(c *gin.Context) {
 		return
 	}
 
-	if err := handlers.DB.Where("machine_id = ?", flag.MachineID).Find(&machineFlags).Error; err != nil {
+	if err := handlers.DB.Where("challenge_id = ?", flag.ChallengeID).Find(&challengeFlags).Error; err != nil {
 		fmt.Println("Flag not found")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Machine flags not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Challenge flags not found!"})
 		return
 	}
 
@@ -45,14 +45,14 @@ func SubmitFlag(c *gin.Context) {
 
 	handlers.DB.Save(user)
 
-	userMachine.UserUsername = user.Username
-	userMachine.MachineID = flag.MachineID
+	userChallenge.UserUsername = user.Username
+	userChallenge.ChallengeID = flag.ChallengeID
 
-	handlers.DB.First(&userMachine)
+	handlers.DB.First(&userChallenge)
 
-	userMachine.Status = utils.CompareUserMachineFlags(user, machineFlags)
+	userChallenge.Status = utils.CompareUserChallengeFlags(user, challengeFlags)
 
-	handlers.DB.Save(&userMachine)
+	handlers.DB.Save(&userChallenge)
 
 	c.JSON(http.StatusOK, gin.H{"Flag submitted:": flag})
 }
