@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func CompareUserChallengeFlags(user models.User, challengeFlags []models.Flag) string {
+func CompareUserChallengeFlags(user models.User, challengeFlags []models.Flag) (int, string) {
 	total := len(challengeFlags)
 	solved := 0
 
@@ -16,8 +16,8 @@ func CompareUserChallengeFlags(user models.User, challengeFlags []models.Flag) s
 	}
 
 	if total == solved {
-		return "Solved!"
+		return models.Finished, "Solved!"
 	}
 
-	return strconv.Itoa(solved) + "/" + strconv.Itoa(total)
+	return models.Started, strconv.Itoa(solved) + "/" + strconv.Itoa(total)
 }

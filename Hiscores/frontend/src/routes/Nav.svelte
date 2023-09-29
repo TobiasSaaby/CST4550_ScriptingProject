@@ -54,7 +54,8 @@
         style="--i: 0">Login</a
       >
     {:else}
-      <a on:click={() => userStore.set("")} class="nav-item" style="--i: 0"
+      <a on:click={() =>{ userStore.set("");document.cookie = `session=""`
+ }} class="nav-item" style="--i: 0"
         >Logout</a
       >
     {/if}

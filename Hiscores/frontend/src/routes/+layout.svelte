@@ -13,7 +13,7 @@
 	};
 
 	let {user, userTableData, challengeTableData} = data;
-
+	
 	userTableData = userTableData.sort(
 		(x, y) =>
 			y.flags.reduce((ySum, yVal) => (ySum = yVal.score), 0) -

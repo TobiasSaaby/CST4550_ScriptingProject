@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { BACKEND_URL } from "../../static/static_values";
+    import { BACKEND_URL_CLIENT } from "../../static/static_values";
     import Modal from "../Modal.svelte";
     import type { User } from "../../models/model.user";
     import { userStore } from "../../stores/store.user";
@@ -20,10 +20,12 @@
 
         let {username, password} = entryData;
 
-        let resp = await fetch(`${BACKEND_URL}/users/login`, { method: 'POST', body: JSON.stringify({ username, password }) });
+        let resp = await fetch(`${BACKEND_URL_CLIENT}/users/login`, { method: 'POST', body: JSON.stringify({ username, password }) });
 		let respJson = await resp.json();
 		let userSignedIn: User = respJson.data;
 
+        document.cookie = `session=${userSignedIn.username}`
+        
         userStore.set(userSignedIn.username);
     };
 

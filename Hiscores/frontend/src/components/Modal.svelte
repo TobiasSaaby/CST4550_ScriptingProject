@@ -24,10 +24,10 @@
 		border-radius: 0.2em;
 		border: none;
 		padding: 0;
-		background-color: rgba(0, 0, 0, 0.5);
+		background-color: rgba(0, 0, 0, 0.7);
 		padding: 40px;
 		box-sizing: border-box;
-		box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+		box-shadow: 0 15px 25px rgba(0, 0, 0, 0.8);
 		border-radius: 10px;
 		
 	}

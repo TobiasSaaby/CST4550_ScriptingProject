@@ -1,15 +1,4 @@
-5
-CTFX_ACCESS=ami-099beeba6a7103aba
-CTFX_ACCESS_TYPE=legacy_bios
-
-4
-CTFX_ACCESS="ami-0b9c49c17663c6fc6"
+mrRobot.ova
+CTFX_ACCESS="ami-02aa6e1e11afa6530"
 CTFX_ACCESS_TYPE="legacy_bios"
 
-3
-CTFX_ACCESS="ami-0e497eaa789073b9e"
-CTFX_ACCESS_TYPE="legacy_bios"
-
-2
-CTFX_ACCESS="ami-04d805c44f124c828"
-CTFX_ACCESS_TYPE="legacy_bios"

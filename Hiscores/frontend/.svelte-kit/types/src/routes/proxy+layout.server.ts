@@ -5,13 +5,12 @@ import type { Challenge, UserChallenge } from "../models/model.challenge";
 
 // get `locals.user` and pass it to the `page` store
 export const load = async ({ locals }: Parameters<LayoutServerLoad>[0]) => {
-
     const reqUsers = await fetch(`${BACKEND_URL}/users`, { method: "GET" });
     const reqChallenges = await fetch(`${BACKEND_URL}/challenges`, { method: "GET" });
 
     const userTableData = (await reqUsers.json()).data;
     const challengeTableData: Challenge[] = (await reqChallenges.json()).data;
-    console.log("us " + locals.user)
+    
     if (locals.user) {
         const reqUserChallenges = await fetch(`${BACKEND_URL}/challenges/${locals.user}`, { method: "GET" });
 

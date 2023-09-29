@@ -8,11 +8,9 @@ ENV PUBLIC_API_URL $PUBLIC_API_URL
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY . .
 
 RUN npm install
-
-COPY . .
 
 RUN npm run-script build
 

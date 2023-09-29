@@ -3,9 +3,7 @@
     import { challengeState, type Challenge, type UserChallenge } from "../models/model.challenge";
 	import { BACKEND_URL_CLIENT } from "../static/static_values";
 	import { onMount } from "svelte";
-    import { getChallengeStateColour } from "../utils/util.mapbox";
-    import { getMarkerIcon, getMarkerIconInner, serverIcon } from "$lib/dynamics/markers";
-    import { Marker } from "mapbox-gl";
+    import { getMarkerIconInner } from "$lib/dynamics/markers";
 
 	export let challenge: Challenge;
 
@@ -90,7 +88,7 @@
 			Initialize CTF
 		</button>
 	{:else if challenge.state.ip}
-		{challenge.state.ip}<button on:click={() => terminate()}>
+		<button on:click={() => terminate()}>
 			<span />
 			<span />
 			<span />

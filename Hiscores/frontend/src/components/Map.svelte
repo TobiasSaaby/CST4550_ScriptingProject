@@ -5,7 +5,7 @@
     import type { Challenge } from "../models/model.challenge";
     import { userChallengeStore } from "../stores/store.userchallenge";
     import ChallengeDetails from "./modals/ChallengeDetails.svelte";
-    import { countries } from "../../../countries";
+    import { countries } from "../countries";
     import { getMarkerIcon } from "$lib/dynamics/markers";
 
     let m: Challenge[];

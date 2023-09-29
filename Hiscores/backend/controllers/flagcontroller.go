@@ -50,7 +50,7 @@ func SubmitFlag(c *gin.Context) {
 
 	handlers.DB.First(&userChallenge)
 
-	userChallenge.Status = utils.CompareUserChallengeFlags(user, challengeFlags)
+	userChallenge.State, userChallenge.Status = utils.CompareUserChallengeFlags(user, challengeFlags)
 
 	handlers.DB.Save(&userChallenge)
 

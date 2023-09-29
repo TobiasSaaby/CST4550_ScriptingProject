@@ -2,11 +2,8 @@ import boto3
 
 from flask import request
 
-i = 0
-
 def Initiate(self, name):
 
-    return "ididid"
     reservation = self.client.run_instances(
         ImageId = name,
         MaxCount = 1,
@@ -26,7 +23,6 @@ def Initiate(self, name):
     return instance["InstanceId"]
 
 def Terminate(self, name):
-    return "yoyo"
     response = self.client.terminate_instances(
         InstanceIds=[name]
     )
@@ -35,14 +31,6 @@ def Terminate(self, name):
 
 
 def Fetch(self, name):
-    global i
-    i = i + 1
-
-    if i % 5 == 0:
-        return "192.168.0.1"
-    else:
-        return ""
-
     running_status = self.client.describe_instance_status(
         InstanceIds=[name]
     ).get("InstanceStatuses")

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { BACKEND_URL } from "../../static/static_values";
+    import { BACKEND_URL_CLIENT } from "../../static/static_values";
     import Modal from "../Modal.svelte";
 
     export let showModal = false;
@@ -18,7 +18,7 @@
             repPassword: formData.get("repPassword")?.toString() ?? ""
         }
 
-		let resp = await fetch(`${BACKEND_URL}/users/register`, {method: 'POST', body: JSON.stringify({username: entryData.username, password: entryData.password, repeat_password: entryData.repPassword})});
+		let resp = await fetch(`${BACKEND_URL_CLIENT}/users/register`, {method: 'POST', body: JSON.stringify({username: entryData.username, password: entryData.password, repeat_password: entryData.repPassword})});
 		let respJson = await resp.json();
         //TODO: Set token in store
     };
@@ -75,10 +75,10 @@
         width: 100%;
         padding: 10px 0;
         font-size: 16px;
-        color: #313131;
+        color: #fff;
         margin-bottom: 30px;
         border: none;
-        border-bottom: 1px solid #313131;
+        border-bottom: 1px solid #fff;
         outline: none;
         background: transparent;
     }
@@ -88,7 +88,7 @@
         left: 0;
         padding: 10px 0;
         font-size: 16px;
-        color: #313131;
+        color: #fff;
         pointer-events: none;
         transition: 0.5s;
     }
